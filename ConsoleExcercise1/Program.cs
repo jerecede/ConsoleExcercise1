@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using ConsoleExcercise1;
 using static System.Net.Mime.MediaTypeNames;
@@ -88,6 +89,25 @@ internal class Program
         //}
 
         //Exercise3(args[1], args[0]);
+
+        //if(args.Length == 1)
+        //{
+        //    string path = args[0];
+        //    string[] lines = File.ReadAllLines(path); //array string
+        //    AnalyzeText(lines);
+        //}
+        //else if(args.Length == 2)
+        //{
+        //    string path = args[0];
+        //    string word = args[1];
+        //    string text = File.ReadAllText(path); //string
+        //    Exercise3(word, text);
+        //}
+        //else
+        //{
+        //    Console.WriteLine("servono almeno due argomenti");
+        //    return;
+        //}            
     }
     private static void PrintHello()
     {
@@ -167,17 +187,72 @@ internal class Program
     }
 
     //quante volte appara wrd in str, mi sono complicato la vita non funziona
-    //public static int Exercise3(string wrd, string str)
-    //{
-    //    int count = 0;
-    //    string pattern = $"\\{wrd}\\";
-    //    Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
-    //    Match mtch = rgx.Match(str);
-    //    if (mtch.Success)
-    //    {
-    //        count = mtch.Groups.Count;
-    //        Console.WriteLine(mtch.Groups.Count);
-    //    }
-    //    return count;
-    //}
+    public static int Exercise3(string word, string text)
+    {
+        string pattern = $"{word}";
+        return Regex.Matches(text, pattern).Count;
+    }
+
+    static void AnalyzeText(string[] lines)
+    {
+        int wordsCount = 0;
+        int charactersCount = 0;
+        int vowelsCount = 0;
+        int consonantCount = 0;
+
+        foreach (var line in lines)
+        {
+            wordsCount += CountWords(line);
+            charactersCount += line.Length;
+            vowelsCount += CountCharType(line, true);
+            consonantCount += CountCharType(line, false);
+        }
+    }
+
+    static int CountWords(string text)
+    {
+        string[] words = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return words.Length;
+    }
+
+    static int CountCharType(string text, bool isVowel)
+    {
+        string pattern;
+        if (isVowel)
+        {
+            pattern = "[aeiouAEIOU]";
+        }
+        else
+        {
+            pattern = "[bcdfghjklmnpqrstvxywzBCDFGHJKLMNPQRSTVXYWZ]";
+        }
+
+        return Regex.Matches(text, pattern).Count;
+    }
+
+    //tutto in uno
+    private static void SuperAnalizer(string path, string? wordToCount = null)
+    {
+        try
+        {
+            string text = File.ReadAllText(path);
+            string[] words = text.Split(new char[] { ' ', '?', '.', ',', '"', '\'' }, StringSplitOptions.RemoveEmptyEntries);
+            if (string.IsNullOrEmpty(wordToCount))
+            {
+                int wordcount = words.Length;
+                int charCount = text.Length;
+                int vowelCount = text.Count(c => "aeiouAEIOU".Contains(c));
+                int consonantCount = text.Count(c => "bcdfghjklmnpqrstvxywzBCDFGHJKLMNPQRSTVXYWZ".Contains(c));
+            }
+            else
+            {
+                int wordOccurences = words.Count(w => w.Equals(wordToCount, StringComparison.OrdinalIgnoreCase));
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return;
+        }
+    }
 }
