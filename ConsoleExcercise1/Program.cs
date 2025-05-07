@@ -90,24 +90,24 @@ internal class Program
 
         //Exercise3(args[1], args[0]);
 
-        //if(args.Length == 1)
-        //{
-        //    string path = args[0];
-        //    string[] lines = File.ReadAllLines(path); //array string
-        //    AnalyzeText(lines);
-        //}
-        //else if(args.Length == 2)
-        //{
-        //    string path = args[0];
-        //    string word = args[1];
-        //    string text = File.ReadAllText(path); //string
-        //    Exercise3(word, text);
-        //}
-        //else
-        //{
-        //    Console.WriteLine("servono almeno due argomenti");
-        //    return;
-        //}            
+        if (args.Length == 1)
+        {
+            string path = args[0];
+            string[] lines = File.ReadAllLines(path); //array string
+            AnalyzeText(lines);
+        }
+        else if (args.Length == 2)
+        {
+            string path = args[0];
+            string word = args[1];
+            string text = File.ReadAllText(path); //string
+            Exercise3(word, text);
+        }
+        else
+        {
+            Console.WriteLine("servono almeno due argomenti");
+            return;
+        }
     }
     private static void PrintHello()
     {
